@@ -1,0 +1,30 @@
+{
+  "name": "full-backend-zero",
+  "version": "1.0.0",
+  "description": "Web ban hang Nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mint234556/csn-da21tta-lymyduyen-webbanhang-nodejs.git"
+  },
+  "keywords": [
+    "Web",
+    "ban",
+    "hang",
+    "Nodejs",
+    "react"
+  ],
+  "author": "Ly My Duyen - DA21TTA - 110121256",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mint234556/csn-da21tta-lymyduyen-webbanhang-nodejs/issues"
+  },
+  "homepage": "https://github.com/Mint234556/csn-da21tta-lymyduyen-webbanhang-nodejs#readme",
+  "dependencies": {
+    "express": "4.18.2"
+  }
+}
