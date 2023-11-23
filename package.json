@@ -1,0 +1,41 @@
+{
+  "name": "csn-da21tta-lymyduyen-webbanhang-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node src/server.js"
+    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mint234556/csn-da21tta-lymyduyen-webbanhang-nodejs.git"
+  },
+  "keywords": [
+    "Nodejs",
+    "web",
+    "ban",
+    "hang",
+    "Nodejs"
+  ],
+  "author": "My Duyen -D21TTA - 110121256",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mint234556/csn-da21tta-lymyduyen-webbanhang-nodejs/issues"
+  },
+  "homepage": "https://github.com/Mint234556/csn-da21tta-lymyduyen-webbanhang-nodejs#readme"
+}
+

@@ -1,11 +1,21 @@
-const http = require('http');
-const hostname = 'localhost';
-const port = 3000;
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n Ly My Duyen');
-});
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+import Express from "express";
+import bodyParser from "body-parser";
+import viewEngine from "./config/viewEngine";
+import initWebRoutes from "./route/web";
+require("dotenv").config();
+
+let app = Express();
+
+//config app
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended : true}))
+
+viewEngine(app);
+initWebRoutes(app);
+
+let port = process.env.PORT || 6969;
+
+app.listen(port, () => {
+    console.log("Backend Nodejs is running on the port" +port)
+})
