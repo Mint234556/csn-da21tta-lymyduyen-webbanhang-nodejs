@@ -1,56 +1,65 @@
 import bcrypt from 'bcryptjs';
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise'; // Sử dụng phiên bản promise
 import bluebird from 'bluebird';
 
-
-const salt = bcrypt.genSaltSync(10);
+const saltRounds = 10;
+const connectionPool = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    database: 'web ban hang nodejs',
+    Promise: bluebird
+});
 
 
 const hashUserPassword = (userPassword) => {
-    let hashPassword = bcrypt.hashSync(userPassword, salt);
-    return hashPassword;
+    return bcrypt.hashSync(userPassword, saltRounds);
 }
 
-const createNewUser = (email, password, username) => {
-    let hashPass = hashUserPassword(password);
-    connection.connect(); // Mở kết nối đến cơ sở dữ liệu
-    connection.query(
-        'INSERT INTO users (email, password, username) VALUES (?, ?, ?)',
-        [email, hashPass, username],
-        function (err, results, fields) {
-            if (err) {
-                console.log(err);
-            }
-        }
-    );
-}
-
-const getUserList = async () =>{
-    const connection = await mysql.createConnection({host:'localhost', user: 'root', database: 'web ban hang nodejs', Promise: bluebird});
-    let user = [];
-    //  connection.query(
-    //     'Select * from users' ,
-    //     function (err, results, fields) {
-    //         if (err) {
-    //             console.log(err);
-    //             return users;
-    //         }
-    //         users = results;
-    //         console.log(">>> run get user list:", users)
-    //        return users;
-    //     }
-    // );
-
-    try{
-        const [rows, fields] = await connection.execute('Select * from users ');
-        return rows;
-        console.log(">>> check rows:", rows)
-    }catch(error){
-
+const createNewUser = async (email, password, username) => {
+    const hashPass = hashUserPassword(password);
+    try {
+        const connection = await mysql.createConnection({host: 'localhost', user:'root', database:'web ban hang nodejs'});
+        const [results, fields] = await connection.execute(
+            'INSERT INTO users (email, password, username) VALUES (?, ?, ?)',
+            [email, hashPass, username]
+        );
+        connection.release(); // Giải phóng kết nối trở lại pool
+        return results;
+    } catch (error) {
+        console.error('Lỗi tạo người dùng mới:', error);
+        throw error; // Ném lại lỗi để xử lý ở cấp cao hơn
     }
-    
+}
+
+const handleUserPage = (req, res) => {
+    let userList = userService.getUserList();
+
+    // Kiểm tra kiểu dữ liệu của userList
+    console.log(">>> check user list type: ", typeof userList);
+
+    console.log(">>> check user list: ", userList)
+    return res.render("user.ejs", { userList });
+}
+
+
+const getUserList = async () => {
+    try {
+        const connection = await connectionPool.getConnection();
+        const [rows, fields] = await connection.execute('SELECT * FROM users');
+        connection.release();
+        return rows;
+    } catch (error) {
+        console.error('Lỗi lấy danh sách người dùng:', error);
+        throw error;
+    }
+}
 
 module.exports = {
-    createNewUser, getUserList
- }
-}
+    getUserList
+};
+
+
+module.exports = {
+    createNewUser,
+    getUserList
+};
