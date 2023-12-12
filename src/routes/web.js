@@ -1,21 +1,23 @@
 import express  from "express";
-import homeController from '../controller/homeController';
+import cosmeticsController from '../controller/cosmeticsController';
+
 const router = express.Router();
+
 
 /**
  * 
  * @param {*} app :express app
  * 
  */
-
 const initwebRoutes = (app) => {
-    router.get("/", homeController.handleHelloWorld); 
-        
-    router.get("/user", homeController.handleUserPage);
-
-    router.post("/users/create-user", homeController.handleCreateNewUser)
-
-    return app.use("/", router);
+  router.get("/", cosmeticsController.handleHelloWorld); 
+      
+  router.get("/user", cosmeticsController.handleUserPage);
+// Routes
+router.get('/products',cosmeticsController.getAllProducts);
+router.get('/products/add', cosmeticsController.getProductForm);
+router.post('/products/add', upload.single('image'), cosmeticsController.addProduct);
+router.get('/products/delete/:id', cosmeticsController.deleteProduct);
 }
 
-export default initwebRoutes;
+export default router;
