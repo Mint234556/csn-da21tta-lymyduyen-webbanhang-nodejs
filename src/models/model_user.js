@@ -1,24 +1,44 @@
-var db = require('./database'); //nhúng model database vào đế kết nối db
+import db from './database.js';
 
-exports.checkEmail = (email) => {
-    return new Promise( (hamOK, hamLoi) => {
-        let sql = `SELECT * FROM user WHERE email = '${email}'`;
-        db.query(sql, (err, d) => {
+export default new class ModelUser {
+
+    // Hàm util để thực hiện các truy vấn MySQL theo dạng Promise
+    queryAsync = (sql) => {
+        return new Promise((resolve, reject) => {
+            db.query(sql, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    };
+
+    checkEmail = async (email) => {
+        try {
+            const sql = `SELECT * FROM user WHERE email = '${email}'`;
+            const data = (await this.queryAsync(sql))[0];
             console.log('List success');
-            data = d[0];
-            hamOK(data);
-        })
+            return data;
+        } catch (error) {
+            console.error('Error checking email', error);
+            throw error;
         }
-    )
-}
-exports.checkUsername = (username) => {
-    return new Promise( (hamOK, hamLoi) => {
-        let sql = `SELECT * FROM user WHERE username = '${username}'`;
-        db.query(sql, (err, d) => {
+    };
+    
+    checkUsername = async (username) => {
+        try {
+            const sql = `SELECT * FROM user WHERE username = '${username}'`;
+            const data = (await this.queryAsync(sql))[0];
             console.log('List success');
-            data = d[0];
-            hamOK(data);
-        })
+            return data;
+        } catch (error) {
+            console.error('Error checking username', error);
+            throw error;
         }
-    )
+    };
+    
+    
 }
+

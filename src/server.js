@@ -1,17 +1,24 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var session = require('express-session');
-var nodemailer = require('nodemailer');
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import session from 'express-session';
+import nodemailer from 'nodemailer';
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var catalogRouter = require('./routes/catalog');
-var productRouter = require('./routes/product');
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
+import catalogRouter from './routes/catalog.js';
+import productRouter from './routes/product.js';
 
-var app = express();
+const app = express();
+
+
+// import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,12 +42,12 @@ app.use('/danh-muc', catalogRouter);
 app.use('/san-pham', productRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -50,4 +57,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+// const port = 3000;
+
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`);
+// })
+
+export default app;

@@ -1,73 +1,72 @@
-var db = require('./database.js');
-var data = [];
-var dataNewArrivel = [];
-var dataRecent = [];
+import db from './database.js';
 
-exports.listCat = async () => {
-    // let sql = "SELECT * FROM catalog";
-    // let query = await db.query(sql, (err, result) => {
-    //     console.log('List success');
-    //     data = result;
-    // })
-    // return data;
-    return new Promise( (hamOK, hamLoi) => {
-            let sql = "SELECT * FROM catalog";
-            db.query(sql, (err, d) => {
-                console.log('List success');
-                    data = d;
-                    hamOK(data);
-            })
-        }
-    )
-}
-exports.listNewArrival = async () => {
-    // let sql = "SELECT * FROM product limit 7";
-    // let query = await db.query(sql, (err, result) => {
-    //     console.log('List success');
-    //     dataNewArrivel = result;
-    // })
-    // return dataNewArrivel;
-    return new Promise( (hamOK, hamLoi) => {
-        let sql = "SELECT * FROM product limit 7";
-        db.query(sql, (err, d) => {
+let data = [];
+let dataNewArrivel = [];
+let dataRecent = [];
+
+export default new class ModelIndex {
+
+    // Hàm util để thực hiện các truy vấn MySQL theo dạng Promise
+    async queryAsync(sql) {
+        return new Promise((resolve, reject) => {
+            db.query(sql, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    };
+
+    listCat = async () => {
+        try {
+            const sql = "SELECT * FROM catalog";
+            data = await this.queryAsync(sql);
             console.log('List success');
-            dataNewArrivel = d;
-                hamOK(dataNewArrivel);
-        })
+            return data;
+        } catch (error) {
+            console.error('Error getting catalog list', error);
+            throw error;
         }
-    )
-}
-exports.listRecent = async () => {
-    // let sql = "SELECT * FROM product ORDER BY dateUpdate DESC limit 6";
-    // let query = await db.query(sql, (err, result) => {
-    //     console.log('List success');
-    //     dataRecent = result;
-    // })
-    // return dataRecent;
-    return new Promise( (hamOK, hamLoi) => {
-        let sql = "SELECT * FROM product ORDER BY dateUpdate DESC limit 6";
-        db.query(sql, (err, d) => {
+    };
+    
+    listNewArrival = async () => {
+        try {
+            const sql = "SELECT * FROM product LIMIT 7";
+            dataNewArrivel = await this.queryAsync(sql);
             console.log('List success');
-            dataRecent = d;
-                hamOK(dataRecent);
-        })
+            return dataNewArrivel;
+        } catch (error) {
+            console.error('Error getting new arrival list', error);
+            throw error;
         }
-    )
-}
-exports.listCart = async (user) => {
-    // let sql = "SELECT * FROM catalog";
-    // let query = await db.query(sql, (err, result) => {
-    //     console.log('List success');
-    //     data = result;
-    // })
-    // return data;
-    return new Promise( (hamOK, hamLoi) => {
-            let sql = `SELECT * FROM cart WHERE user='${user}'`;
-            db.query(sql, (err, d) => {
-                console.log('List success');
-                    data = d;
-                    hamOK(data);
-            })
+    };
+    
+    listRecent = async () => {
+        try {
+            const sql = "SELECT * FROM product ORDER BY dateUpdate DESC LIMIT 6";
+            dataRecent = await this.queryAsync(sql);
+            console.log('List success');
+            return dataRecent;
+        } catch (error) {
+            console.error('Error getting recent list', error);
+            throw error;
         }
-    )
+    };
+    
+    listCart = async (user) => {
+        try {
+            const sql = `SELECT * FROM cart WHERE user='${user}'`;
+            data = await this.queryAsync(sql);
+            console.log('List success');
+            return data;
+        } catch (error) {
+            console.error('Error getting cart list', error);
+            throw error;
+        }
+    };
+    
 }
+
+

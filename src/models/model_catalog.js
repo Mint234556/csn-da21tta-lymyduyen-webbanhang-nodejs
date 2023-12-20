@@ -1,51 +1,52 @@
-var db = require('./database'); //nhúng model database vào đế kết nối db
-var itemCat=[]; // biến để chứa dữ liệu đổ về cho controller
-var dataList=[];
-var dataListPro=[];
+import db from './database.js'; // Nhúng model database vào để kết nối db
 
-// định nghĩa các hàm để tương tác vào mysql
-exports.list = async () => {
-    // let sql = "SELECT * FROM catalog";
-    // let query = await db.query(sql, (err, result) => {
-    //     console.log('Get List catalog success');
-    //     dataList = result;
-    // })
-    // return dataList;
-    return new Promise( (hamOK, hamLoi) => {
-        let sql = "SELECT * FROM catalog";
-        db.query(sql, (err, d) => {
+let itemCat = []; // Biến để chứa dữ liệu đổ về cho controller
+let dataList = [];
+let dataListPro = [];
+
+export default new class ModelCatalog {
+
+    // Hàm util để thực hiện các truy vấn MySQL theo dạng Promise
+    queryAsync = (sql) => {
+        return new Promise((resolve, reject) => {
+            db.query(sql, (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    };
+
+    // Định nghĩa các hàm để tương tác vào MySQL
+    list = async () => {
+        try {
+            const sql = "SELECT * FROM catalog";
+            dataList = await this.queryAsync(sql);
             console.log('List success');
-            dataList = d;
-            hamOK(dataList);
-        })
+            return dataList;
+        } catch (error) {
+            console.error('Error getting catalog list', error);
+            throw error;
         }
-    )
-}
-exports.listByName = async (nameCat) => {
-    // let sql = `SELECT * FROM catalog WHERE nameCat='${nameCat}'`;
-    // let query = await db.query(sql, (err, result) => {
-    //     console.log('Get idCat by nameCat success');
-    //     itemCat = result[0].idCat;
-    // })
-    // let sql2 = `SELECT * FROM product WHERE idCat=${itemCat}`;
-    // let query2 = await db.query(sql2, (err, result) => {
-    //     console.log('Get list product by id Cat success');
-    //     dataListPro = result;
-    // })
-    // return dataListPro;
+    };
 
-    return new Promise( (hamOK, hamLoi) => {
-        let sql = `SELECT * FROM catalog WHERE nameCat='${nameCat}'`;
-        db.query(sql, (err, result) => {
-            console.log('Get idCat by nameCat success');
-            itemCat = result[0].idCat;
-        })
-        let sql2 = `SELECT * FROM product WHERE idCat=${itemCat}`;
-        db.query(sql2, (err, result) => {
+    listByName = async (nameCat) => {
+        try {
+            const sql = `SELECT * FROM catalog WHERE nameCat='${nameCat}'`;
+            itemCat = (await this.queryAsync(sql))[0].idCat;
+
+            const sql2 = `SELECT * FROM product WHERE idCat=${itemCat}`;
+            dataListPro = await this.queryAsync(sql2);
+
             console.log('Get list product by id Cat success');
-            dataListPro = result;
-            hamOK(dataListPro);
-        })
+            return dataListPro;
+        } catch (error) {
+            console.error('Error getting product list by category name', error);
+            throw error;
         }
-    )
+    };
+
+    
 }
