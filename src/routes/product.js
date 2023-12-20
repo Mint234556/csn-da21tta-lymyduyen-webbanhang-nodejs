@@ -121,13 +121,11 @@ router.post('/comment/createcomment', async (req, res) => {
 });
 
 function xoa_dau(str) {
-    // Hàm xóa dấu như trong mã nguồn gốc
-    // ...
+    
 }
 
 function replaceNameProduct(nameProduct) {
-    // Hàm thay thế tên sản phẩm như trong mã nguồn gốc
-    // ...
+    
 }
 
 export default router;
