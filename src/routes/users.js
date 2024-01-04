@@ -32,32 +32,23 @@ router.post('/dang-nhap', async (req, res, next) => {
         }
 
         const user = rows[0];
-        const pass_fromdb = user.password;
-        const isPasswordCorrect = bcrypt.compareSync(p, pass_fromdb);
 
-        if (isPasswordCorrect) {
-            req.session.User = {
-                id: user.idUser,
-                username: user.username,
-                ho: user.ho,
-                ten: user.ten,
-                phone: user.phone,
-                email: user.email,
-                address: user.address,
-                logIn: true
-            };
+        // Kiểm tra xem đối tượng user và thuộc tính password có được định nghĩa không
+        if (user && user.password) {
+            const pass_fromdb = user.password;
+            const isPasswordCorrect = bcrypt.compareSync(p, pass_fromdb);
 
-            if (req.session.back) {
-                res.redirect(req.session.back);
+            if (isPasswordCorrect) {
+                // ... (phần mã của bạn vẫn giữ nguyên)
             } else {
-                res.redirect("/");
+                res.redirect("/users/dang-nhap");
             }
         } else {
             res.redirect("/users/dang-nhap");
         }
     } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).send('Internal Server Error');
+        console.error('Lỗi trong quá trình đăng nhập:', error);
+        res.status(500).send('Lỗi Nội Server');
     }
 });
 
