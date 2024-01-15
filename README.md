@@ -1,3 +1,4 @@
+
 <h1 align="center"><a href="https://github.com/Mint234556/csn-da21tta-lymyduyen-webbanhang-nodejs.git">Web bán hàng Nodejs</a></h1>
 <p align="center">
     <a href="https://nodejs.org/en"><img src="https://img.shields.io/badge/Nodejs-%23770ef8" alt="Nodejs"></a>
@@ -30,3 +31,6 @@ Các công cụ được sử dụng trong dự án này bao gồm:
 ## Liên Hệ
 - **Email:** myduyen170502@gmail.com
 - **Số điện thoại:** 0768874294
+=======
+
+>>>>>>> 5dd64162fa6fe8c8ef886189a2dcceaf1baa6380
